@@ -6,6 +6,8 @@ import cloudinary from "../lib/cloudinary.js";
 
 export const signup = async (req, res) => {
   const { fullName, email, password, profilePic } = req.body;
+  console.log("Signup request received:", { fullName, email, profilePic: !!profilePic });
+  
   try {
     if (!fullName || !email || !password) {
       return res.status(400).json({ message: "All fields are required" });
@@ -40,6 +42,8 @@ export const signup = async (req, res) => {
 
     generateToken(newUser._id, res);
     await newUser.save();
+
+    console.log("User created successfully:", newUser._id);
 
     res.status(201).json({
       _id: newUser._id,
@@ -115,6 +119,7 @@ export const updateProfile = async (req, res) => {
 
 export const checkAuth = (req, res) => {
   try {
+    console.log("CheckAuth request received, user:", req.user);
     res.status(200).json(req.user);
   } catch (error) {
     console.log("Error in checkAuth controller", error.message);
